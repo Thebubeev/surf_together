@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:test_task/domain/repositories/firestore_repository/firestore_repository_impl.dart';
+import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
 
 part 'cubit_event.dart';
 part 'cubit_state.dart';

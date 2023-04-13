@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_task/domain/repositories/firestore_repository/firestore_repository_impl.dart';
+import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
 import 'package:test_task/presentation/bloc/cubit_bloc.dart';
 import 'package:test_task/presentation/widgets/loader_widget.dart';
 import 'package:test_task/presentation/widgets/widgets.dart';

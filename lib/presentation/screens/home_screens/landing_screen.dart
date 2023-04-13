@@ -7,7 +7,7 @@ import 'package:test_task/presentation/widgets/appbar_widget.dart';
 import 'package:test_task/presentation/widgets/loader_widget.dart';
 import 'package:test_task/utils/constants/constants.dart';
 import 'package:test_task/data/models/place_model.dart';
-import 'package:test_task/domain/repositories/firestore_repository/firestore_repository_impl.dart';
+import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);

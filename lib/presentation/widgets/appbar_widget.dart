@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:test_task/domain/repositories/firestore_repository/firestore_repository_impl.dart';
-import 'package:test_task/presentation/screens/authentication_screens/wrapper_auth_screen.dart';
+import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
 
 class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
    AppBarWidget({

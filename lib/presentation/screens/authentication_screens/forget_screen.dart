@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
-import 'package:test_task/presentation/bloc/cubit_bloc.dart';
-import 'package:test_task/presentation/widgets/loader_widget.dart';
-import 'package:test_task/presentation/widgets/widgets.dart';
+import 'package:surf_together/presentation/bloc/cubit_bloc.dart';
+import 'package:surf_together/presentation/widgets/loader_widget.dart';
+import 'package:surf_together/presentation/widgets/widgets.dart';
 
 class ForgetScreen extends StatefulWidget {
   const ForgetScreen({Key? key}) : super(key: key);
@@ -12,7 +11,6 @@ class ForgetScreen extends StatefulWidget {
 }
 
 class _ForgetScreenState extends State<ForgetScreen> {
-  final auth = FirebaseRepositoryImpl();
   final _emailController = TextEditingController();
 
   String? _warning;

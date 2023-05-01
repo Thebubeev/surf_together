@@ -1,18 +1,20 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/domain/repositories/interfaces/firestore_repository.dart';
 
 part 'cubit_event.dart';
 part 'cubit_state.dart';
 
 class CubitBloc extends Bloc<CubitEvent, CubitState> {
   final _firebaseAuth = FirebaseAuth.instance;
-  final auth = FirebaseRepositoryImpl();
+  FirebaseRepository firebaseRepository = FirebaseRepositoryImpl();
+
   CubitBloc() : super(CubitInitial()) {
     on<CubitLoginWithGoogleEvent>((event, emit) async {
       try {
-        await auth.signInWithGoogle().then((value) {
+        await firebaseRepository.signInWithGoogle().then((value) {
           if (value.idUser != null) {
             emit(const CubitNavigatorState(route: '/home'));
           }
@@ -24,7 +26,7 @@ class CubitBloc extends Bloc<CubitEvent, CubitState> {
     });
     on<CubitForgotPasswordEvent>((event, emit) async {
       try {
-        await auth.resetPasswordUsingEmail(event.login);
+        await firebaseRepository.resetPasswordUsingEmail(event.login);
         emit(CubitRecoveryPasswordState());
       } catch (error) {
         String _warning = 'Что-то прошло не так...';
@@ -48,7 +50,7 @@ class CubitBloc extends Bloc<CubitEvent, CubitState> {
     });
     on<CubitRegisterEvent>((event, emit) async {
       try {
-        await auth.createUserWithEmailAndPassword(
+        await firebaseRepository.createUserWithEmailAndPassword(
             event.login.trim(), event.password.trim(), event.name.trim());
         emit(CubitRegisterToastState());
       } catch (error) {
@@ -77,7 +79,7 @@ class CubitBloc extends Bloc<CubitEvent, CubitState> {
     });
     on<CubitLoginEvent>((event, emit) async {
       try {
-        await auth
+        await firebaseRepository
             .signInWithEmailAndPassword(
                 event.login.trim(), event.password.trim())
             .then((_) async => _firebaseAuth.currentUser!.emailVerified
@@ -101,7 +103,7 @@ class CubitBloc extends Bloc<CubitEvent, CubitState> {
 
             _firebaseAuth.currentUser!.emailVerified
                 ? null
-                : await auth.sendVerificationEmail();
+                : await firebaseRepository.sendVerificationEmail();
             break;
           case "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.":
             _warning = "Логин или пароль неверный.";

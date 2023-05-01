@@ -1,4 +1,4 @@
-package com.example.test_task
+package tourism.cubit.com
 
 import io.flutter.embedding.android.FlutterActivity
 

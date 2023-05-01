@@ -1,4 +1,4 @@
-name: test_task
+name: surf_together
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -39,7 +39,7 @@ dependencies:
   flutter_svg: ^1.0.3
   blur: ^3.1.0
   equatable: ^2.0.5
-  cached_network_image: ^2.5.1
+  cached_network_image: ^3.2.3
   # Firebase
   firebase_core: ^2.3.0
   firebase_auth: ^4.1.3
@@ -50,10 +50,19 @@ dependencies:
   # Services
   google_sign_in: ^5.4.2
   go_router: ^6.5.6
+  flutter_launcher_icons: "^0.10.0"
+  change_app_package_name: ^0.1.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "surf_icon"
+  image_path: "assets/icon/icon.png" 
+  adaptive_icon_foreground: "assets/icon/icon.png" 
+  adaptive_icon_background: "#ffffff"
+  ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

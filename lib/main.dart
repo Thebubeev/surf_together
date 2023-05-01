@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_task/domain/services/firebase_messaging_services.dart';
-import 'package:test_task/presentation/bloc/cubit_bloc.dart';
-import 'package:test_task/utils/extensions/http_overrides.dart';
-import 'package:test_task/utils/routes/route_screens.dart';
+import 'package:surf_together/domain/services/firebase_messaging_services.dart';
+import 'package:surf_together/presentation/bloc/cubit_bloc.dart';
+import 'package:surf_together/utils/extensions/http_overrides.dart';
+import 'package:surf_together/utils/routes/route_screens.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

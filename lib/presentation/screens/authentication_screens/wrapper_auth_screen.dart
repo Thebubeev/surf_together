@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:test_task/presentation/screens/authentication_screens/register_screen.dart';
-
-import 'login_screen.dart';
 
 class WrapperAuthScreen extends StatelessWidget {
   const WrapperAuthScreen({Key? key}) : super(key: key);

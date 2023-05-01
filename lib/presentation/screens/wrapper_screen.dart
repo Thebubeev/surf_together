@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_task/presentation/screens/home_screens/book_screen.dart';
-import 'package:test_task/presentation/screens/home_screens/landing_screen.dart';
-import 'package:test_task/presentation/screens/home_screens/profile_screen.dart';
+import 'package:surf_together/presentation/screens/home_screens/book_screen.dart';
+import 'package:surf_together/presentation/screens/home_screens/landing_screen.dart';
+import 'package:surf_together/presentation/screens/home_screens/profile_screen.dart';
 
 class WrapperScreen extends StatefulWidget {
   const WrapperScreen({Key? key}) : super(key: key);

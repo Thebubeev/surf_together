@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/domain/repositories/firestore_repository_impl.dart';
 
 class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
    AppBarWidget({

@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:test_task/presentation/screens/authentication_screens/forget_screen.dart';
-import 'package:test_task/presentation/screens/authentication_screens/login_screen.dart';
-import 'package:test_task/presentation/screens/authentication_screens/register_screen.dart';
-import 'package:test_task/presentation/screens/authentication_screens/wrapper_auth_screen.dart';
-import 'package:test_task/presentation/screens/home_screens/book_screen.dart';
-import 'package:test_task/presentation/screens/home_screens/landing_screen.dart';
-import 'package:test_task/presentation/screens/home_screens/profile_screen.dart';
-import 'package:test_task/presentation/screens/wrapper_screen.dart';
+import 'package:surf_together/presentation/screens/authentication_screens/forget_screen.dart';
+import 'package:surf_together/presentation/screens/authentication_screens/login_screen.dart';
+import 'package:surf_together/presentation/screens/authentication_screens/register_screen.dart';
+import 'package:surf_together/presentation/screens/authentication_screens/wrapper_auth_screen.dart';
+import 'package:surf_together/presentation/screens/home_screens/book_screen.dart';
+import 'package:surf_together/presentation/screens/home_screens/landing_screen.dart';
+import 'package:surf_together/presentation/screens/home_screens/profile_screen.dart';
+import 'package:surf_together/presentation/screens/wrapper_screen.dart';
 
 class RouteScreens {
   static final router = GoRouter(routes: [

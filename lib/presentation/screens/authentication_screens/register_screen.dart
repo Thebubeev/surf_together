@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
-import 'package:test_task/presentation/bloc/cubit_bloc.dart';
-import 'package:test_task/presentation/widgets/loader_widget.dart';
-import 'package:test_task/presentation/widgets/widgets.dart';
+import 'package:surf_together/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/domain/repositories/interfaces/firestore_repository.dart';
+import 'package:surf_together/presentation/bloc/cubit_bloc.dart';
+import 'package:surf_together/presentation/widgets/loader_widget.dart';
+import 'package:surf_together/presentation/widgets/widgets.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final auth = FirebaseRepositoryImpl();
+  FirebaseRepository firebaseRepository = FirebaseRepositoryImpl();
   final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController();
@@ -45,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             _isLoading = false;
             _warning = 'Пожалуйста, подтвердите вашу почту.';
           });
-          await auth.sendVerificationEmail();
+          await firebaseRepository.sendVerificationEmail();
         }
 
         if (state is CubitRegisterErrorState) {

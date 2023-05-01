@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test_task/domain/services/firebase_messaging_services.dart';
-import 'package:test_task/presentation/widgets/albom_card_widget.dart';
-import 'package:test_task/presentation/widgets/appbar_widget.dart';
-import 'package:test_task/presentation/widgets/loader_widget.dart';
-import 'package:test_task/utils/constants/constants.dart';
-import 'package:test_task/data/models/place_model.dart';
-import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/data/models/place_model.dart';
+import 'package:surf_together/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/domain/repositories/interfaces/firestore_repository.dart';
+import 'package:surf_together/domain/services/firebase_messaging_services.dart';
+import 'package:surf_together/presentation/widgets/albom_card_widget.dart';
+import 'package:surf_together/presentation/widgets/appbar_widget.dart';
+import 'package:surf_together/presentation/widgets/loader_widget.dart';
+import 'package:surf_together/utils/constants/constants.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   String textController = '';
 
-  final firebaseRepository = FirebaseRepositoryImpl();
+  FirebaseRepository firebaseRepository = FirebaseRepositoryImpl();
   final firebaseMessagingServices = FirebaseMessagingServices();
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');

@@ -189,7 +189,7 @@ class _TextFormConfirmPassFieldState extends State<TextFormConfirmPassField> {
           labelStyle:
               const TextStyle(color: Colors.black, fontFamily: 'Gilroy'),
           border: const OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey)),
+              borderSide: BorderSide(color: Colors.grey)),
           enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.grey),
               borderRadius: BorderRadius.circular(10)),
@@ -249,8 +249,8 @@ class _ShowAlertState extends State<ShowAlert> {
         child: Row(
           children: <Widget>[
             const Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: const Icon(Icons.error_outline, color: Colors.black)),
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Icon(Icons.error_outline, color: Colors.black)),
             Expanded(
               child: Text(
                 widget.warning!,
@@ -304,8 +304,8 @@ Widget enterButton(
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10.0),
-                bottomLeft: const Radius.circular(10.0),
-                bottomRight: const Radius.circular(10.0),
+                bottomLeft: Radius.circular(10.0),
+                bottomRight: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
               ),
               color: Colors.green),

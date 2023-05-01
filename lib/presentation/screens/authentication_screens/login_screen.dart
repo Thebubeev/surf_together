@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:test_task/domain/repositories/firestore_repository_impl.dart';
-import 'package:test_task/presentation/bloc/cubit_bloc.dart';
-import 'package:test_task/presentation/widgets/widgets.dart';
-
-import '../../widgets/loader_widget.dart';
+import 'package:surf_together/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/domain/repositories/interfaces/firestore_repository.dart';
+import 'package:surf_together/presentation/bloc/cubit_bloc.dart';
+import 'package:surf_together/presentation/widgets/loader_widget.dart';
+import 'package:surf_together/presentation/widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final auth = FirebaseRepositoryImpl();
+  FirebaseRepository firebaseRepository = FirebaseRepositoryImpl();
   final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController();
@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _warning = 'Пожалуйста, подтвердите вашу почту.';
           });
           try {
-            await auth.sendVerificationEmail();
+            await firebaseRepository.sendVerificationEmail();
           } catch (e) {
             print(e);
           }

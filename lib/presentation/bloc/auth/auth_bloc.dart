@@ -1,33 +1,37 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:surf_together/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/domain/repositories/firebase_repository_impl.dart';
 import 'package:surf_together/domain/repositories/interfaces/firestore_repository.dart';
+import 'package:surf_together/domain/repositories/interfaces/shared_preferences_repository.dart';
+import 'package:surf_together/domain/repositories/shared_preferences_repository_impl.dart';
 
-part 'cubit_event.dart';
-part 'cubit_state.dart';
+part 'auth_event.dart';
+part 'auth_state.dart';
 
-class CubitBloc extends Bloc<CubitEvent, CubitState> {
+class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   final _firebaseAuth = FirebaseAuth.instance;
   FirebaseRepository firebaseRepository = FirebaseRepositoryImpl();
+  SharedPreferencesRepository sharedPreferencesRepository =
+      SharedPreferenceRepositoryImpl();
 
-  CubitBloc() : super(CubitInitial()) {
-    on<CubitLoginWithGoogleEvent>((event, emit) async {
+  AuthBloc() : super(AuthInitial()) {
+    on<AuthLoginWithGoogleEvent>((event, emit) async {
       try {
         await firebaseRepository.signInWithGoogle().then((value) {
           if (value.idUser != null) {
-            emit(const CubitNavigatorState(route: '/home'));
+            emit(const AuthNavigatorState(route: '/home'));
           }
         });
       } catch (e) {
         print(e.toString());
-        emit(const CubitLoginErrorState(warning: 'Что-то прошло не так...'));
+        emit(const AuthLoginErrorState(warning: 'Что-то прошло не так...'));
       }
     });
-    on<CubitForgotPasswordEvent>((event, emit) async {
+    on<AuthForgotPasswordEvent>((event, emit) async {
       try {
         await firebaseRepository.resetPasswordUsingEmail(event.login);
-        emit(CubitRecoveryPasswordState());
+        emit(AuthRecoveryPasswordState());
       } catch (error) {
         String _warning = 'Что-то прошло не так...';
         switch (error.toString()) {
@@ -45,14 +49,14 @@ class CubitBloc extends Bloc<CubitEvent, CubitState> {
             break;
         }
         print(error);
-        emit(CubitRecoveryErrorState(warning: _warning));
+        emit(AuthRecoveryErrorState(warning: _warning));
       }
     });
-    on<CubitRegisterEvent>((event, emit) async {
+    on<AuthRegisterEvent>((event, emit) async {
       try {
         await firebaseRepository.createUserWithEmailAndPassword(
             event.login.trim(), event.password.trim(), event.name.trim());
-        emit(CubitRegisterToastState());
+        emit(AuthRegisterToastState());
       } catch (error) {
         String _warning = 'Что-то прошло не так...';
         switch (error.toString()) {
@@ -74,17 +78,23 @@ class CubitBloc extends Bloc<CubitEvent, CubitState> {
             break;
         }
         print(error);
-        emit(CubitRegisterErrorState(warning: _warning));
+        emit(AuthRegisterErrorState(warning: _warning));
       }
     });
-    on<CubitLoginEvent>((event, emit) async {
+    on<AuthLoginEvent>((event, emit) async {
       try {
         await firebaseRepository
             .signInWithEmailAndPassword(
                 event.login.trim(), event.password.trim())
             .then((_) async => _firebaseAuth.currentUser!.emailVerified
-                ? emit(const CubitNavigatorState(route: '/home'))
-                : {emit(CubitLoginToastState())});
+                ? {
+                    sharedPreferencesRepository
+                        .setUserDocId(_firebaseAuth.currentUser!.email!),
+                    sharedPreferencesRepository
+                        .setTempData(_firebaseAuth.currentUser!.email!),
+                    emit(const AuthNavigatorState(route: '/home'))
+                  }
+                : {emit(AuthLoginToastState())});
       } catch (error) {
         String _warning = 'Что-то прошло не так...';
         switch (error.toString()) {
@@ -114,7 +124,7 @@ class CubitBloc extends Bloc<CubitEvent, CubitState> {
             break;
         }
         print(error);
-        emit(CubitLoginErrorState(warning: _warning));
+        emit(AuthLoginErrorState(warning: _warning));
       }
     });
   }

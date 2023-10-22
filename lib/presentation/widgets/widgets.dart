@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:surf_together/utils/constants/constants.dart';
 
 void _fieldFocusChange(
     BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
@@ -22,17 +24,17 @@ class _TextFormEmailFieldState extends State<TextFormEmailField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: const TextStyle(color: Colors.black),
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: 'Email',
-        labelStyle: const TextStyle(color: Colors.black, fontFamily: 'Gilroy'),
+        labelStyle: const TextStyle(color: Colors.white, fontFamily: 'Gilroy'),
         border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey)),
+            borderSide: BorderSide(color: Colors.white)),
         enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(10)),
         focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(10)),
       ),
       controller: widget.emailController,
@@ -72,12 +74,12 @@ class _TextFormNameFieldState extends State<TextFormNameField> {
         labelText: 'Ваше имя',
         labelStyle: const TextStyle(color: Colors.black, fontFamily: 'Gilroy'),
         border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey)),
+            borderSide: BorderSide(color: Colors.black, width: 0.7)),
         enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey),
+            borderSide: const BorderSide(color: Colors.black, width: 0.7),
             borderRadius: BorderRadius.circular(10)),
         focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey),
+            borderSide: const BorderSide(color: Colors.black, width: 0.7),
             borderRadius: BorderRadius.circular(10)),
       ),
       controller: widget.nameController,
@@ -93,6 +95,58 @@ class _TextFormNameFieldState extends State<TextFormNameField> {
           widget.nameController.text = val as String;
         });
       },
+    );
+  }
+}
+
+class TextFormRoleField extends StatefulWidget {
+  const TextFormRoleField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<TextFormRoleField> createState() => _TextFormRoleFieldState();
+}
+
+const List<String> list = <String>['Сёрфер', 'Хост'];
+
+class _TextFormRoleFieldState extends State<TextFormRoleField> {
+  String dropdownValue = list.first;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
+      child: DropdownButton<String>(
+        value: dropdownValue,
+        icon: const Icon(
+          Icons.arrow_downward,
+          color: Colors.white,
+        ),
+        elevation: 16,
+        style: const TextStyle(color: Colors.green),
+        underline: Container(
+          height: 2,
+          color: Colors.green,
+        ),
+        onChanged: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        items: list.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.black),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
@@ -118,12 +172,12 @@ class _TextFormPassFieldState extends State<TextFormPassField> {
           labelStyle:
               const TextStyle(color: Colors.black, fontFamily: 'Gilroy'),
           border: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey)),
+              borderSide: BorderSide(color: Colors.black, width: 0.7)),
           enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.black, width: 0.7),
               borderRadius: BorderRadius.circular(10)),
           focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.black, width: 0.7),
               borderRadius: BorderRadius.circular(10)),
           suffixIcon: IconButton(
             onPressed: () {
@@ -189,12 +243,12 @@ class _TextFormConfirmPassFieldState extends State<TextFormConfirmPassField> {
           labelStyle:
               const TextStyle(color: Colors.black, fontFamily: 'Gilroy'),
           border: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey)),
+              borderSide: BorderSide(color: Colors.black, width: 0.7)),
           enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.black, width: 0.7),
               borderRadius: BorderRadius.circular(10)),
           focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.black, width: 0.7),
               borderRadius: BorderRadius.circular(10)),
           suffixIcon: IconButton(
             onPressed: () {
@@ -282,7 +336,7 @@ class _ShowAlertState extends State<ShowAlert> {
 Widget iconBackButton(BuildContext context) => IconButton(
     padding: const EdgeInsets.only(top: 15, bottom: 15),
     alignment: Alignment.topLeft,
-    icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
     iconSize: 35,
     onPressed: () {
       context.pop();
@@ -318,3 +372,148 @@ Widget enterButton(
                 color: Colors.white, fontFamily: 'Gilroy', fontSize: 17),
           )),
         ));
+
+Widget discriptionCard(
+    IconData icon, String text, String title, BuildContext context) {
+  return Row(
+    children: [
+      Icon(
+        icon,
+        size: 20,
+        color: Colors.grey,
+      ),
+      const SizedBox(
+        width: 6,
+      ),
+      Text('$text: ' + title, style: Constants.defaultTextTitleStyle),
+    ],
+  );
+}
+
+Padding coloredCard() {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 20),
+    child: Row(
+      children: [
+        cardWidget(
+            'assets/images/Users.svg',
+            const Color.fromARGB(255, 52, 101, 195),
+            const Color.fromARGB(255, 87, 133, 222),
+            'Мои сети\n',
+            'Подключайтесь и расширяйте свою сеть'),
+        cardWidget(
+            'assets/images/Vector.svg',
+            const Color.fromARGB(255, 236, 78, 39),
+            const Color.fromARGB(255, 244, 126, 97),
+            'Поиск жилья',
+            'Найдите жилье себе быстро и удобно'),
+        cardWidget(
+            'assets/images/Subtract.svg',
+            const Color.fromARGB(255, 107, 52, 195),
+            const Color.fromARGB(255, 142, 94, 219),
+            'Мой профиль',
+            'Обновляйте свой, чтобы быть в топе'),
+      ],
+    ),
+  );
+}
+
+Widget albomCard(String imageUrl, String title, String subtitle) {
+  return GestureDetector(
+    onTap: () {},
+    child: Card(
+      color: const Color.fromARGB(255, 240, 242, 245),
+      elevation: 0,
+      child: Stack(
+        children: [
+          Row(children: [
+            Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              width: 70,
+              height: 70,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 20,
+                bottom: 10,
+                top: 10,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w400, fontSize: 13),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                        fontSize: 12,
+                        color: Color.fromARGB(255, 101, 101, 101)),
+                  )
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+            ),
+          ])
+        ],
+      ),
+    ),
+  );
+}
+
+Expanded cardWidget(String imageUrl, Color color1, Color color2, String title,
+    String subtitle) {
+  return Expanded(
+    child: SizedBox(
+      height: 160,
+      child: Card(
+        child: InkWell(
+          onTap: () {
+            debugPrint('go to page');
+          },
+          child: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [color1, color2],
+              )),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset(
+                        imageUrl,
+                        width: 35,
+                        height: 35,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(subtitle,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 10,
+                          )),
+                    ]),
+              )),
+        ),
+      ),
+    ),
+  );
+}

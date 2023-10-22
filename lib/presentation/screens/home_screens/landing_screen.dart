@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:surf_together/data/models/place_model.dart';
-import 'package:surf_together/domain/repositories/firestore_repository_impl.dart';
+import 'package:surf_together/domain/repositories/firebase_repository_impl.dart';
 import 'package:surf_together/domain/repositories/interfaces/firestore_repository.dart';
+import 'package:surf_together/domain/repositories/interfaces/sqflite_places_dao_repository.dart';
+import 'package:surf_together/domain/repositories/sqflite_places_dao_repository_impl.dart';
 import 'package:surf_together/domain/services/firebase_messaging_services.dart';
-import 'package:surf_together/presentation/widgets/albom_card_widget.dart';
+import 'package:surf_together/presentation/widgets/card_widget.dart';
 import 'package:surf_together/presentation/widgets/appbar_widget.dart';
 import 'package:surf_together/presentation/widgets/loader_widget.dart';
 import 'package:surf_together/utils/constants/constants.dart';
@@ -18,127 +18,87 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  final _firebaseAuth = FirebaseAuth.instance;
-
   String textController = '';
 
   FirebaseRepository firebaseRepository = FirebaseRepositoryImpl();
   final firebaseMessagingServices = FirebaseMessagingServices();
-
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-  String name = '';
-
-  @override
-  void initState() {
-    init();
-    firebaseMessagingServices.listenFirebaseMessaging();
-    super.initState();
-  }
-
-  init() async {
-    await users
-        .where('email', isEqualTo: _firebaseAuth.currentUser!.email)
-        .limit(1)
-        .get()
-        .then((snapshot) async {
-      if (snapshot.docs.isNotEmpty) {
-        setState(() {
-          name = snapshot.docs.single.get('name');
-        });
-      }
-    });
-  }
-
+  SqflitePlacesDaoRepository sqflitePlacesDaoRepository =
+      SqflitePlacesDaoRepositoryImpl();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBarWidget(),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Text(
-                      'Привет, $name',
-                      style: Constants.defaultTextStyle,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 30, bottom: 20),
-                    child: Text(
-                      'Давай выберем маршрут путешествия',
-                      style: Constants.defaultBigTextStyle,
-                    ),
-                  ),
-                  TextFormField(
-                    onChanged: (val) {
-                      setState(() {
-                        textController = val;
-                      });
-                    },
-                    decoration: InputDecoration(
-                        hintText: 'Поиск маршрута',
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15))),
-                  ),
-                  StreamBuilder<List<PlaceModel>>(
-                      stream: firebaseRepository.getAllPlace(),
-                      builder: ((context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const LoaderWidget();
-                        }
-                        if (snapshot.hasError) {
-                          return const Center(
-                            child: Text('Some error'),
+      body: StreamBuilder<List<PlaceModel>>(
+          stream: firebaseRepository.getAllPlace(),
+          builder: (context, snapshot) {
+            final places = snapshot.data;
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('Что-то прошло не так...'),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return LoaderWidget();
+            }
+            return GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Column(children: [
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Text(
+                              'Давай найдем твой ночлег',
+                              style: Constants.defaultBigTextStyle,
+                            ),
+                          ),
+                          TextFormField(
+                            onChanged: (val) {
+                              setState(() {
+                                textController = val;
+                              });
+                            },
+                            decoration: InputDecoration(
+                                hintText: 'Поиск жилья',
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                  color: Colors.grey,
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15))),
+                          ),
+                        ]),
+                      ),
+                      SliverList(
+                          delegate:
+                              SliverChildBuilderDelegate((context, index) {
+                        if (textController.isEmpty) {
+                          return CardWidget(
+                            placeModel: places![index],
                           );
                         }
-                        if (snapshot.hasData) {
-                          return SizedBox(
-                            height: 500,
-                            child: ListView.builder(
-                                itemBuilder: ((context, index) {
-                                  if (textController.isEmpty) {
-                                    return AlbomCardWidget(
-                                        url: snapshot.data![index].imageUrl,
-                                        title: snapshot.data![index].name,
-                                        subtitle: snapshot.data![index].city);
-                                  }
-                                  if (snapshot.data![index].name
-                                      .toLowerCase()
-                                      .startsWith(
-                                          textController.toLowerCase())) {
-                                    return AlbomCardWidget(
-                                        url: snapshot.data![index].imageUrl,
-                                        title: snapshot.data![index].name,
-                                        subtitle: snapshot.data![index].city);
-                                  }
-                                  return Container();
-                                }),
-                                itemCount: snapshot.data?.length),
+                        if (places![index]
+                            .name
+                            .toLowerCase()
+                            .startsWith(textController.toLowerCase())) {
+                          return CardWidget(
+                            placeModel: places[index],
                           );
-                        } else {
-                          return Container();
                         }
-                      }))
-                ],
+                        return Container();
+                      }, childCount: places?.length))
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 }
